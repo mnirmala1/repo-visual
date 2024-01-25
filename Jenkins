@@ -1,0 +1,46 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout source code from version control system (e.g., Git)
+                checkout scm
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                // Build your project (e.g., using Maven, Gradle, etc.)
+                sh 'mvn clean install'
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                // Run tests for your project
+                sh 'mvn test'
+            }
+        }
+        
+        stage('Deploy') {
+            steps {
+                // Deploy your application (e.g., to a server or a cloud platform)
+                sh './deploy.sh'
+            }
+        }
+    }
+    
+    post {
+        success {
+            // Actions to perform if the pipeline is successful
+            echo 'Build successful! Deploying...'
+        }
+        failure {
+            // Actions to perform if the pipeline fails
+            echo 'Build failed! Not deploying.'
+        }
+    }
+}
+
+
